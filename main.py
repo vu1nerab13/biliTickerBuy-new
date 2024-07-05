@@ -26,6 +26,17 @@ custom_css = """
 }
 """
 
+js_func = """
+function refresh() {
+    const url = new URL(window.location);
+
+    if (url.searchParams.get('__theme') !== 'light') {
+        url.searchParams.set('__theme', 'light');
+        window.location.href = url.href;
+    }
+}
+"""
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=7860, help="server port")
@@ -33,7 +44,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     logger.add("app.log")
-    with gr.Blocks(head=short_js, css=custom_css) as demo:
+    with gr.Blocks(head=short_js, css=custom_css, js=js_func) as demo:
         gr.Markdown(header)
         with gr.Tab("配置"):
             setting_tab()
