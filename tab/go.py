@@ -546,7 +546,25 @@ def go_tab():
                 tickets_info["again"] = 1
                 tickets_info["token"] = request_result["data"]["token"]
                 logger.info(f"2）创建订单")
-                tickets_info["timestamp"] = int(time.time()) * 100
+                now_time = int(time.time()*1000)
+                device_Id = uuid.uuid4()
+                device_Id_str = str(device_Id).replace("-","")
+                tickets_info.pop("detail")
+                tickets_info.pop("buyer")
+                tickets_info.pop("tel")
+                tickets_info.pop("deliver_info")
+                tickets_info["timestamp"] = now_time
+                tickets_info["id_bind"] = 2
+                tickets_info["need_contact"] = 0
+                tickets_info["is_package"] = 0
+                tickets_info["package_num"] = 1
+                tickets_info["contactInfo"] = None
+                tickets_info["coupon_code"] = ""
+                tickets_info["again"] = 0
+                tickets_info["deviceId"] = device_Id_str
+                tickets_info["version"] = "1.1.0"
+                tickets_info["clickPosition"] = {"x":274,"y":796,"origin":now_time-2000,"now":now_time+1}
+                tickets_info["requestSource"] = "neul-next"
                 payload = format_dictionary_to_string(tickets_info)
 
                 @retry.retry(exceptions=RequestException, tries=60, delay=interval / 1000)
